@@ -1,13 +1,18 @@
+require('dotenv').config();
 const { Client, GatewayIntentBits } = require('discord.js');
 const compute = require('@google-cloud/compute');
-const config = require('./config.json');
+
+// Parse the service account JSON from env
+const serviceAccountKey = JSON.parse(process.env.SERVICE_ACCOUNT_KEY_JSON);
+
+console.log(serviceAccountKey);
 
 // Set up Discord client
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 // Set up Google Cloud Compute client
 const computeClient = new compute.FirewallsClient({
-  keyFilename: config.serviceAccountKeyPath
+  credentials: serviceAccountKey
 });
 
 client.once('ready', () => {
@@ -29,8 +34,8 @@ client.on('interactionCreate', async interaction => {
     try {
       // Fetch current firewall rule
       const [firewall] = await computeClient.get({
-        project: config.projectId,
-        firewall: config.firewallRule
+        project: process.env.PROJECT_ID,
+        firewall: process.env.FIREWALL_RULE
       });
 
       const existingIps = firewall.sourceRanges || [];
@@ -49,12 +54,12 @@ client.on('interactionCreate', async interaction => {
 
       // Update the firewall rule
       await computeClient.patch({
-        project: config.projectId,
-        firewall: config.firewallRule,
+        project: process.env.PROJECT_ID,
+        firewall: process.env.FIREWALL_RULE,
         firewallResource: updatedFirewall
       });
 
-      await interaction.reply({ content: `✅ IP added to firewall rule! `});
+      await interaction.reply({ content: `✅ IP added to firewall rule!` });
 
     } catch (error) {
       console.error('🚨 Error modifying firewall:', error);
@@ -63,4 +68,4 @@ client.on('interactionCreate', async interaction => {
   }
 });
 
-client.login(config.token);
+client.login(process.env.DISCORD_TOKEN);

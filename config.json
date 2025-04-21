@@ -1,8 +1,0 @@
-{
-    "token": "MTM2Mzk3NjEwMjE1ODI3MDUwNQ.GQpOVQ.biFWtLKHUpIsn1e7aEp7jGZ7VKeI6QkcKHldAM",
-    "clientId": "1363976102158270505",
-    "guildId": "1363917594196840742",
-    "projectId": "phonic-avatar-457516-r1",
-    "firewallRule": "mcserver",
-    "serviceAccountKeyPath": "./key.json"
-}
