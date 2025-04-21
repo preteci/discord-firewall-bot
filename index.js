@@ -1,6 +1,17 @@
 require('dotenv').config();
 const { Client, GatewayIntentBits } = require('discord.js');
 const compute = require('@google-cloud/compute');
+const express = require('express');
+const app = express();
+const port = 3000;
+
+app.get('/', (req, res) => {
+  res.send('Bot is alive!');
+});
+
+app.listen(port, () => {
+  console.log(`Web server is running on port ${port}`);
+});
 
 // Parse the service account JSON from env
 const serviceAccountKey = JSON.parse(process.env.SERVICE_ACCOUNT_KEY_JSON);
